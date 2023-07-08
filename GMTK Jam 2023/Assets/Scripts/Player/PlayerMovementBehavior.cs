@@ -159,7 +159,7 @@ public class PlayerMovementBehavior : MonoBehaviour
         vel.y = Mathf.Sin((angle) * Mathf.PI / 180) * value*.005f*velModifier;
 
         //Clamp velocity as needed
-        if (vel.magnitude > maxSpeed && velModifier != 2)
+        if (vel.magnitude > maxSpeed && velModifier !>1)
         {
             vel = Vector2.ClampMagnitude(vel, maxSpeed);
             print("clamped");
@@ -169,6 +169,9 @@ public class PlayerMovementBehavior : MonoBehaviour
         if (!isCaught)
         {
             rb2d.AddForce(vel);
+            vel = rb2d.velocity;
+            vel *= velModifier;
+            rb2d.velocity = vel;
         }
         else
         {
@@ -211,24 +214,6 @@ public class PlayerMovementBehavior : MonoBehaviour
     {
         //Reference to the current position
         clampedPos = transform.position;
-        /*
-        //A series of checks: if the player is out of bounds, put them in bounds
-        if (transform.position.x > playableAreaWidth / 2)
-        {
-            clampedPos.x = playableAreaWidth / 2;
-        }
-        if (transform.position.x < -playableAreaWidth / 2)
-        {
-            clampedPos.x = -playableAreaWidth / 2;
-        }
-        if (transform.position.y > playableAreaHeight / 2)
-        {
-            clampedPos.y = playableAreaHeight / 2;
-        }
-        if (transform.position.y < -playableAreaHeight / 2)
-        {
-            clampedPos.y = -playableAreaHeight / 2;
-        }*/
 
         //Set the player's position to the clamped position
         transform.position = clampedPos;

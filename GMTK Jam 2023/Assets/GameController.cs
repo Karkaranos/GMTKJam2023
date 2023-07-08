@@ -13,6 +13,20 @@ public class GameController : MonoBehaviour
     KnifeBehavior kb;
     [SerializeField]
     private GameObject paw;
+    [SerializeField]
+    private GameObject bbq1;
+    [SerializeField]
+    private GameObject bbq2;
+    [SerializeField]
+    private GameObject bbq3;
+    [SerializeField]
+    private GameObject oil1;
+    [SerializeField]
+    private GameObject oil2;
+    [SerializeField]
+    private GameObject oil3;
+
+    private int spawnTime;
 
     private float speed = .001f;
     Vector3 moveForce;
@@ -21,6 +35,7 @@ public class GameController : MonoBehaviour
     Vector3 spawnPos;
 
     public bool isCatching = false;
+    private int gameTime;
 
 
     // Start is called before the first frame update
@@ -30,6 +45,8 @@ public class GameController : MonoBehaviour
         pmb = player.GetComponent<PlayerMovementBehavior>();
         kb = knife.GetComponent<KnifeBehavior>();
         StartCoroutine(CheckForPlayer());
+        StartCoroutine(SauceSplots());
+        StartCoroutine(Timer());
     }
 
     // Update is called once per frame
@@ -76,6 +93,55 @@ public class GameController : MonoBehaviour
         moveForce.y = dir.y;
         moveForce *= speed;
         newObj.GetComponent<Rigidbody2D>().AddForce(moveForce);
+    }
+
+    IEnumerator Timer()
+    {
+        while (pcb.lives > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            gameTime++;
+        }
+    }
+
+    IEnumerator SauceSplots()
+    {
+        while (pcb.lives > 0)
+        {
+            yield return new WaitForSeconds(Random.Range(2,6));
+            int chance = Random.Range(1, 16);
+            if (chance <= (gameTime / 15))
+            {
+                chance = Random.Range(1, 7);
+                Vector2 spawnPos;
+                spawnPos.x = Random.Range(-27, 31);
+                spawnPos.y = Random.Range(-18, 20);
+                if (chance == 1)
+                {
+                    Instantiate(bbq1, spawnPos, Quaternion.identity);
+                }
+                if (chance == 2)
+                {
+                    Instantiate(bbq2, spawnPos, Quaternion.identity);
+                }
+                if (chance == 3)
+                {
+                    Instantiate(bbq3, spawnPos, Quaternion.identity);
+                }
+                if (chance == 4)
+                {
+                    Instantiate(oil1, spawnPos, Quaternion.identity);
+                }
+                if (chance == 5)
+                {
+                    Instantiate(oil2, spawnPos, Quaternion.identity);
+                }
+                if (chance == 6)
+                {
+                    Instantiate(oil3, spawnPos, Quaternion.identity);
+                }
+            }
+        }
     }
 
 }

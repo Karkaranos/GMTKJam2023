@@ -122,7 +122,7 @@ public class PlayerCollisionBehavior : MonoBehaviour
             kb.playerAlive = true;
             pmb.velModifier = 1;
             beenHit = false;
-            transform.localScale = new Vector3(.5f, .5f, .5f);
+            transform.localScale = new Vector3(1, 1, 1);
             kb.StartKnife();
         }
     }
