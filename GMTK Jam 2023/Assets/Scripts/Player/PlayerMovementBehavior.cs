@@ -124,69 +124,36 @@ public class PlayerMovementBehavior : MonoBehaviour
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            angle -= angleAmt;
-        }
-        else
-        {
-            wait++;
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            angle += angleAmt;
-        }
-        else
-        {
-            wait++;
-        }
-        /*if (Input.GetKey(KeyCode.RightArrow))
-        {
-            vel.x += forceAmt;      //Add rightward force
-            canSlow = true;
+            angle -= angleAmt;      //Turn player right
         }
         else
         {
             wait++;                 //Increase input checker
         }
         if (Input.GetKey(KeyCode.LeftArrow))
-        {   
-            vel.x -= forceAmt;      //Add leftward force
-            canSlow = true;
+        {
+            angle += angleAmt;      //Turn player left
         }
         else
         {
             wait++;                 //Increase input checker
-        }*/
+        }
 
-
-        //Set player's velocity
-        //rb2d.velocity = vel*velModifier;
+        //Set the rotation to the current angle
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-        //Use angles to set proper values?
+        //Convert the given angle and force into a velocity vector
+        vel.x = Mathf.Cos((angle)*Mathf.PI / 180) * value*.01f*velModifier;
+        vel.y = Mathf.Sin((angle) * Mathf.PI / 180) * value*.01f*velModifier;
 
-        //Moved forward...ish- oscilates between needing up and down arrow to move forward
-        //vel = transform.up * vel.magnitude;
-        //rb2d.velocity = vel;
-
-        //oh god this was awful but it sort of moved? very jittrty and shaky
-        /*Vector2 newVel;
-        newVel.x = vel.x * Mathf.Cos(angle) - vel.y * Mathf.Sin(angle);
-        newVel.y = vel.x * Mathf.Sin(angle) + vel.y * Mathf.Cos(angle);
-        rb2d.velocity = newVel;*/
-
-        /*Vector3 dirX = transform.right * vel.x*.0001f;
-        Vector3 dirY = transform.up * vel.y*.0001f;
-        rb2d.AddForce(new Vector2(dirX.x, dirY.y));
-        print(dirX + " " + dirY);*/
-
-        Vector2 moveForce;
-        vel.x = Mathf.Cos((angle+90)*Mathf.PI / 180) * value*.01f*velModifier;
-        vel.y = Mathf.Sin((angle+90) * Mathf.PI / 180) * value*.01f*velModifier;
+        //Clamp velocity as needed
         if (vel.magnitude > maxSpeed && velModifier != 2)
         {
             vel = Vector2.ClampMagnitude(vel, maxSpeed);
             print("clamped");
         }
+
+        //Add velocity to the player
         rb2d.AddForce(vel);
 
 
@@ -252,22 +219,35 @@ public class PlayerMovementBehavior : MonoBehaviour
 
     #region Collisions
 
+    /// <summary>
+    /// Handles collisions when colliding with a trigger
+    /// </summary>
+    /// <param name="collision"></param>
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        //If the collision should slow down the player, reduce their speed
         if (collision.gameObject.tag == "SlowDown")
         {
             velModifier = slowdownSpeed;
+
+            //Start a timer for when the speed returns to normal
             StartCoroutine(SpeedChangeTimer());
         }
 
+        //If the collision should speed up the player, increase their speed
         if (collision.gameObject.tag == "SpeedUp")
         {
             velModifier = speedupSpeed;
+
+            //Start a timer for when the speed returns to normal
             StartCoroutine(SpeedChangeTimer());
         }
     }
 
-
+    /// <summary>
+    /// Handles resetting the player's speed
+    /// </summary>
+    /// <returns></returns>
     IEnumerator SpeedChangeTimer()
     {
         yield return new WaitForSeconds(speedAdjustmentTimer);
