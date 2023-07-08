@@ -52,7 +52,14 @@ public class PlayerMovementBehavior : MonoBehaviour
     [SerializeField]
     private float speedAdjustmentTimer;
 
+    [SerializeField]
+    private ParticleSystem seeds;
+    [SerializeField]
+    private ParticleSystem flesh;
+
     private float value;
+
+    public List<Vector3> positions = new List<Vector3>();
 
     #endregion
 
@@ -212,6 +219,7 @@ public class PlayerMovementBehavior : MonoBehaviour
 
         //Set the player's position to the clamped position
         transform.position = clampedPos;
+        positions.Add(clampedPos);
     }
 
 
@@ -242,6 +250,19 @@ public class PlayerMovementBehavior : MonoBehaviour
             //Start a timer for when the speed returns to normal
             StartCoroutine(SpeedChangeTimer());
         }
+
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Knife")
+        {
+            velModifier = 0;
+            seeds.transform.localScale = new Vector3(1, 1, 1);
+            flesh.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            StartCoroutine(Respawn());
+
+        }
     }
 
     /// <summary>
@@ -252,6 +273,13 @@ public class PlayerMovementBehavior : MonoBehaviour
     {
         yield return new WaitForSeconds(speedAdjustmentTimer);
         velModifier = 1;
+    }
+
+    IEnumerator Respawn()
+    {
+        yield return new WaitForSeconds(3);
+        seeds.transform.localScale = Vector3.zero;
+        flesh.transform.localScale = Vector3.zero;
     }
 
     #endregion
