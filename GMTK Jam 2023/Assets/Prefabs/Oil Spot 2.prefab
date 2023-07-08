@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3589085343356743759}
   - component: {fileID: 3589085343356743758}
   - component: {fileID: 3589085343356743753}
+  - component: {fileID: 2259069390720413572}
   m_Layer: 0
   m_Name: Oil Spot 2
   m_TagString: SpeedUp
@@ -116,3 +117,15 @@ PolygonCollider2D:
       - {x: 0.69951415, y: -1.5291953}
       - {x: 2.0760403, y: -1.3597703}
       - {x: 2.9388742, y: 1.7495036}
+--- !u!114 &2259069390720413572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3589085343356743752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12d2387c88f1d0a478984bc01267f17c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
