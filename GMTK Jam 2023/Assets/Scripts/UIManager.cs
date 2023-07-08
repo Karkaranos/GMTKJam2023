@@ -1,3 +1,10 @@
+/*****************************************************************************
+// File Name :         UIManager.cs
+// Author :            Cade R. Naylor
+// Creation Date :     July 7, 2023
+//
+// Brief Description : Controls game's UI
+*****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

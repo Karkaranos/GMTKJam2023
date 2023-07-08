@@ -51,6 +51,10 @@ public class PlayerMovementBehavior : MonoBehaviour
     private float value;
 
     public List<Vector3> positions = new List<Vector3>();
+    public bool isCaught = false;
+
+    [SerializeField]
+    private GameObject paw;
 
     #endregion
 
@@ -162,7 +166,14 @@ public class PlayerMovementBehavior : MonoBehaviour
         }
 
         //Add velocity to the player
-        rb2d.AddForce(vel);
+        if (!isCaught)
+        {
+            rb2d.AddForce(vel);
+        }
+        else
+        {
+            transform.position = paw.transform.position;
+        }
 
 
     }
@@ -199,7 +210,7 @@ public class PlayerMovementBehavior : MonoBehaviour
     {
         //Reference to the current position
         clampedPos = transform.position;
-
+        /*
         //A series of checks: if the player is out of bounds, put them in bounds
         if (transform.position.x > playableAreaWidth / 2)
         {
@@ -216,7 +227,7 @@ public class PlayerMovementBehavior : MonoBehaviour
         if (transform.position.y < -playableAreaHeight / 2)
         {
             clampedPos.y = -playableAreaHeight / 2;
-        }
+        }*/
 
         //Set the player's position to the clamped position
         transform.position = clampedPos;
