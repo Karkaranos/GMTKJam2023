@@ -43,16 +43,14 @@ public class PlayerMovementBehavior : MonoBehaviour
     public bool canSlow = false;        //Only allows slow down after first input
     Vector2 vel;                    //Player's velocity
     private float angle;
-    private float velModifier = 1;
+    public float velModifier = 1;
 
-    [SerializeField]
-    private float slowdownSpeed;
-    [SerializeField]
-    private float speedupSpeed;
-    [SerializeField]
-    private float speedAdjustmentTimer;
+    private PlayerCollisionBehavior pcb;
+    private KnifeBehavior kb;
 
     private float value;
+
+    public List<Vector3> positions = new List<Vector3>();
 
     #endregion
 
@@ -67,6 +65,8 @@ public class PlayerMovementBehavior : MonoBehaviour
         vel = new Vector2(5f, 0.0001f);
         rb2d = GetComponent<Rigidbody2D>();
         rb2d.velocity = vel;
+        pcb = GetComponent<PlayerCollisionBehavior>();
+        kb = GameObject.Find("Knife").GetComponent<KnifeBehavior>();
     }
 
 
@@ -124,69 +124,39 @@ public class PlayerMovementBehavior : MonoBehaviour
 
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            angle -= angleAmt;
-        }
-        else
-        {
-            wait++;
-        }
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            angle += angleAmt;
-        }
-        else
-        {
-            wait++;
-        }
-        /*if (Input.GetKey(KeyCode.RightArrow))
-        {
-            vel.x += forceAmt;      //Add rightward force
-            canSlow = true;
+            angle -= angleAmt;      //Turn player right
         }
         else
         {
             wait++;                 //Increase input checker
         }
         if (Input.GetKey(KeyCode.LeftArrow))
-        {   
-            vel.x -= forceAmt;      //Add leftward force
-            canSlow = true;
+        {
+            angle += angleAmt;      //Turn player left
         }
         else
         {
             wait++;                 //Increase input checker
-        }*/
+        }
 
+        //Set the rotation to the current angle if not hit
+        if (velModifier != 0)
+        {
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }
 
-        //Set player's velocity
-        //rb2d.velocity = vel*velModifier;
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        //Convert the given angle and force into a velocity vector
+        vel.x = Mathf.Cos((angle)*Mathf.PI / 180) * value*.005f*velModifier;
+        vel.y = Mathf.Sin((angle) * Mathf.PI / 180) * value*.005f*velModifier;
 
-        //Use angles to set proper values?
-
-        //Moved forward...ish- oscilates between needing up and down arrow to move forward
-        //vel = transform.up * vel.magnitude;
-        //rb2d.velocity = vel;
-
-        //oh god this was awful but it sort of moved? very jittrty and shaky
-        /*Vector2 newVel;
-        newVel.x = vel.x * Mathf.Cos(angle) - vel.y * Mathf.Sin(angle);
-        newVel.y = vel.x * Mathf.Sin(angle) + vel.y * Mathf.Cos(angle);
-        rb2d.velocity = newVel;*/
-
-        /*Vector3 dirX = transform.right * vel.x*.0001f;
-        Vector3 dirY = transform.up * vel.y*.0001f;
-        rb2d.AddForce(new Vector2(dirX.x, dirY.y));
-        print(dirX + " " + dirY);*/
-
-        Vector2 moveForce;
-        vel.x = Mathf.Cos((angle+90)*Mathf.PI / 180) * value*.01f*velModifier;
-        vel.y = Mathf.Sin((angle+90) * Mathf.PI / 180) * value*.01f*velModifier;
+        //Clamp velocity as needed
         if (vel.magnitude > maxSpeed && velModifier != 2)
         {
             vel = Vector2.ClampMagnitude(vel, maxSpeed);
             print("clamped");
         }
+
+        //Add velocity to the player
         rb2d.AddForce(vel);
 
 
@@ -245,36 +215,13 @@ public class PlayerMovementBehavior : MonoBehaviour
 
         //Set the player's position to the clamped position
         transform.position = clampedPos;
-    }
-
-
-    #endregion
-
-    #region Collisions
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "SlowDown")
+        if (kb.playerAlive)
         {
-            velModifier = slowdownSpeed;
-            StartCoroutine(SpeedChangeTimer());
-        }
-
-        if (collision.gameObject.tag == "SpeedUp")
-        {
-            velModifier = speedupSpeed;
-            StartCoroutine(SpeedChangeTimer());
+            positions.Add(clampedPos);
         }
     }
 
 
-    IEnumerator SpeedChangeTimer()
-    {
-        yield return new WaitForSeconds(speedAdjustmentTimer);
-        velModifier = 1;
-    }
-
     #endregion
-
 
 }
