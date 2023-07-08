@@ -172,6 +172,7 @@ public class PlayerMovementBehavior : MonoBehaviour
         }
         else
         {
+            paw = GameObject.Find("Paw(Clone)");
             transform.position = paw.transform.position;
         }
 
