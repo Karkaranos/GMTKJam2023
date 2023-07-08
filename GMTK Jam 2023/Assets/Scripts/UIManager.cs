@@ -25,6 +25,8 @@ public class UIManager : MonoBehaviour
     private Sprite splatHeart;
     [SerializeField]
     private Text timeText;
+    [SerializeField]
+    private Text gameOverText;
 
     private int secSurvived;
     private int minSurvived;
@@ -85,6 +87,7 @@ public class UIManager : MonoBehaviour
             img.sprite = splatHeart;
             img = heart3.GetComponent<Image>();
             img.sprite = splatHeart;
+            gameOverText.GetComponent<Text>().color = new Color(0, 0, 0, 1);
         }
     }
 
