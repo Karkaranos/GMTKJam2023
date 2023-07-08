@@ -6,6 +6,7 @@
 // Brief Description : Creates initial player direction, handles player input and 
                         momentum. 
 *****************************************************************************/
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +22,8 @@ public class PlayerMovementBehavior : MonoBehaviour
     private float speed;            //Player's current speed
     [SerializeField]
     private float forceAmt;         //Force added for a key being down
+    [SerializeField]
+    private float angleAmt;         //Force added to angle
 
     [SerializeField]
     private float playableAreaWidth;    //Gets game's width
@@ -39,6 +42,17 @@ public class PlayerMovementBehavior : MonoBehaviour
     private int wait;                   //Checks for current input
     public bool canSlow = false;        //Only allows slow down after first input
     Vector2 vel;                    //Player's velocity
+    private float angle;
+    private float velModifier = 1;
+
+    [SerializeField]
+    private float slowdownSpeed;
+    [SerializeField]
+    private float speedupSpeed;
+    [SerializeField]
+    private float speedAdjustmentTimer;
+
+    private float value;
 
     #endregion
 
@@ -84,12 +98,14 @@ public class PlayerMovementBehavior : MonoBehaviour
     /// </summary>
     private void GetInput()
     {
+        value = 0;
         //Resets the input checker
         wait = 0;
         if (Input.GetKey(KeyCode.UpArrow))
         {
-            vel.y += forceAmt;      //Add upward force
+            //vel.y += forceAmt;      //Add upward force
             canSlow = true;
+            value += forceAmt;
         }
         else
         {
@@ -97,14 +113,32 @@ public class PlayerMovementBehavior : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
-            vel.y -= forceAmt;      //Add downward force
+            //vel.y -= forceAmt;      //Add downward force
             canSlow = true;
+            value -= forceAmt;
         }
         else
         {
             wait++;                 //Increase input checker
         }
+
         if (Input.GetKey(KeyCode.RightArrow))
+        {
+            angle -= angleAmt;
+        }
+        else
+        {
+            wait++;
+        }
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            angle += angleAmt;
+        }
+        else
+        {
+            wait++;
+        }
+        /*if (Input.GetKey(KeyCode.RightArrow))
         {
             vel.x += forceAmt;      //Add rightward force
             canSlow = true;
@@ -121,10 +155,36 @@ public class PlayerMovementBehavior : MonoBehaviour
         else
         {
             wait++;                 //Increase input checker
-        }
+        }*/
+
 
         //Set player's velocity
-        rb2d.velocity = vel;
+        //rb2d.velocity = vel*velModifier;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+        //Use angles to set proper values?
+
+        //Moved forward...ish- oscilates between needing up and down arrow to move forward
+        //vel = transform.up * vel.magnitude;
+        //rb2d.velocity = vel;
+
+        //oh god this was awful but it sort of moved? very jittrty and shaky
+        /*Vector2 newVel;
+        newVel.x = vel.x * Mathf.Cos(angle) - vel.y * Mathf.Sin(angle);
+        newVel.y = vel.x * Mathf.Sin(angle) + vel.y * Mathf.Cos(angle);
+        rb2d.velocity = newVel;*/
+
+        /*Vector3 dirX = transform.right * vel.x*.0001f;
+        Vector3 dirY = transform.up * vel.y*.0001f;
+        rb2d.AddForce(new Vector2(dirX.x, dirY.y));
+        print(dirX + " " + dirY);*/
+
+        Vector2 moveForce;
+        vel.x = Mathf.Cos((angle+90)*Mathf.PI / 180) * value*.05f*velModifier;
+        vel.y = Mathf.Sin((angle+90) * Mathf.PI / 180) * value*.05f*velModifier;
+        rb2d.AddForce(vel);
+
+
     }
 
     /// <summary>
@@ -180,6 +240,33 @@ public class PlayerMovementBehavior : MonoBehaviour
 
         //Set the player's position to the clamped position
         transform.position = clampedPos;
+    }
+
+
+    #endregion
+
+    #region Collisions
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "SlowDown")
+        {
+            velModifier = slowdownSpeed;
+            StartCoroutine(SpeedChangeTimer());
+        }
+
+        if (collision.gameObject.tag == "SpeedUp")
+        {
+            velModifier = speedupSpeed;
+            StartCoroutine(SpeedChangeTimer());
+        }
+    }
+
+
+    IEnumerator SpeedChangeTimer()
+    {
+        yield return new WaitForSeconds(speedAdjustmentTimer);
+        velModifier = 1;
     }
 
     #endregion
