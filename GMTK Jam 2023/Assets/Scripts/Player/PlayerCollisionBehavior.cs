@@ -116,7 +116,7 @@ public class PlayerCollisionBehavior : MonoBehaviour
             Vector3 destroyme = pmb.positions[i];
             pmb.positions.Remove(destroyme);
         }
-        if (lives >= 0)
+        if (lives > 0)
         {
             transform.position = Vector3.zero;
             kb.playerAlive = true;

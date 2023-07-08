@@ -22,6 +22,10 @@ public class KnifeBehavior : MonoBehaviour
     private GameObject knife;
     Vector3 targetPos;
     Vector3 chopTargetPos;
+    [SerializeField]
+    private Sprite knifeFlash;
+    [SerializeField]
+    private Sprite normalKnife;
 
     [SerializeField]
     private float timeBetweenAttacks;
@@ -105,6 +109,9 @@ public class KnifeBehavior : MonoBehaviour
                     yield return new WaitForSeconds(stepBetween);
                 }
                 isFallen = true;
+                knife.GetComponent<SpriteRenderer>().sprite = knifeFlash;
+                yield return new WaitForSeconds(.1f);
+                knife.GetComponent<SpriteRenderer>().sprite = normalKnife;
                 yield return new WaitForSeconds(1f);
                 for (float f = 1.5f; f < 3; f += .2f)
                 {

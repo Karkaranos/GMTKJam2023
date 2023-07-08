@@ -140,9 +140,14 @@ public class PlayerMovementBehavior : MonoBehaviour
         }
 
         //Set the rotation to the current angle if not hit
-        if (velModifier != 0)
+        if (velModifier != 0&&kb.playerAlive)
         {
+            rb2d.constraints = RigidbodyConstraints2D.None;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }
+        else
+        {
+            rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
 
         //Convert the given angle and force into a velocity vector
