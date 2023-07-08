@@ -143,8 +143,8 @@ public class PlayerMovementBehavior : MonoBehaviour
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
         //Convert the given angle and force into a velocity vector
-        vel.x = Mathf.Cos((angle)*Mathf.PI / 180) * value*.01f*velModifier;
-        vel.y = Mathf.Sin((angle) * Mathf.PI / 180) * value*.01f*velModifier;
+        vel.x = Mathf.Cos((angle)*Mathf.PI / 180) * value*.005f*velModifier;
+        vel.y = Mathf.Sin((angle) * Mathf.PI / 180) * value*.005f*velModifier;
 
         //Clamp velocity as needed
         if (vel.magnitude > maxSpeed && velModifier != 2)
