@@ -51,6 +51,10 @@ public class PlayerMovementBehavior : MonoBehaviour
     private float value;
 
     public List<Vector3> positions = new List<Vector3>();
+    public bool isCaught = false;
+
+    [SerializeField]
+    private GameObject paw;
 
     #endregion
 
@@ -140,9 +144,14 @@ public class PlayerMovementBehavior : MonoBehaviour
         }
 
         //Set the rotation to the current angle if not hit
-        if (velModifier != 0)
+        if (velModifier != 0&&kb.playerAlive)
         {
+            rb2d.constraints = RigidbodyConstraints2D.None;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }
+        else
+        {
+            rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
 
         //Convert the given angle and force into a velocity vector
@@ -157,7 +166,14 @@ public class PlayerMovementBehavior : MonoBehaviour
         }
 
         //Add velocity to the player
-        rb2d.AddForce(vel);
+        if (!isCaught)
+        {
+            rb2d.AddForce(vel);
+        }
+        else
+        {
+            transform.position = paw.transform.position;
+        }
 
 
     }
@@ -194,7 +210,7 @@ public class PlayerMovementBehavior : MonoBehaviour
     {
         //Reference to the current position
         clampedPos = transform.position;
-
+        /*
         //A series of checks: if the player is out of bounds, put them in bounds
         if (transform.position.x > playableAreaWidth / 2)
         {
@@ -211,7 +227,7 @@ public class PlayerMovementBehavior : MonoBehaviour
         if (transform.position.y < -playableAreaHeight / 2)
         {
             clampedPos.y = -playableAreaHeight / 2;
-        }
+        }*/
 
         //Set the player's position to the clamped position
         transform.position = clampedPos;

@@ -1,3 +1,10 @@
+/*****************************************************************************
+// File Name :         UIManager.cs
+// Author :            Cade R. Naylor
+// Creation Date :     July 7, 2023
+//
+// Brief Description : Controls game's UI
+*****************************************************************************/
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +23,11 @@ public class UIManager : MonoBehaviour
     private Sprite fullHeart;
     [SerializeField]
     private Sprite splatHeart;
+    [SerializeField]
+    private Text timeText;
+
+    private int secSurvived;
+    private int minSurvived;
 
     PlayerCollisionBehavior pcb;
 
@@ -23,6 +35,8 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         pcb = GameObject.Find("Tomato").GetComponent<PlayerCollisionBehavior>();
+        StartCoroutine(Timer());
+
     }
 
     // Update is called once per frame
@@ -50,6 +64,7 @@ public class UIManager : MonoBehaviour
             img.sprite = fullHeart;
             img = heart3.GetComponent<Image>();
             img.sprite = splatHeart;
+            img.transform.localScale = new Vector3(.6f, .6f, .6f);
         }
         if (pcb.lives == 1)
         {
@@ -57,6 +72,7 @@ public class UIManager : MonoBehaviour
             img.sprite = fullHeart;
             img = heart2.GetComponent<Image>();
             img.sprite = splatHeart;
+            img.transform.localScale = new Vector3(.6f, .6f, .6f);
             img = heart3.GetComponent<Image>();
             img.sprite = splatHeart;
         }
@@ -64,10 +80,33 @@ public class UIManager : MonoBehaviour
         {
             var img = heart1.GetComponent<Image>();
             img.sprite = splatHeart;
+            img.transform.localScale = new Vector3(.6f, .6f, .6f);
             img = heart2.GetComponent<Image>();
             img.sprite = splatHeart;
             img = heart3.GetComponent<Image>();
             img.sprite = splatHeart;
+        }
+    }
+
+    IEnumerator Timer()
+    {
+        while (pcb.lives > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            secSurvived++;
+            if (secSurvived == 60)
+            {
+                minSurvived++;
+                secSurvived = 0;
+            }
+            if (secSurvived < 10)
+            {
+                timeText.text = ("Time Survived: " + minSurvived + ":0" + secSurvived);
+            }
+            else
+            {
+                timeText.text = ("Time Survived: " + minSurvived + ":" + secSurvived);
+            }
         }
     }
 }
