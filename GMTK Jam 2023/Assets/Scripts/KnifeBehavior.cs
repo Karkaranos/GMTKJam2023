@@ -30,6 +30,8 @@ public class KnifeBehavior : MonoBehaviour
     [SerializeField]
     private float timeBetweenAttacks;
 
+    private GameController gc;
+
     private bool canTrack = false;
     private bool isAttacking = false;
     private float stepBetween = .05f;
@@ -41,6 +43,7 @@ public class KnifeBehavior : MonoBehaviour
     /// </summary>
     void Start()
     {
+        gc = GameObject.Find("GameController").GetComponent<GameController>();
         knifeShadow.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
         StartCoroutine(Pause());
         StartCoroutine(Attack());
@@ -91,7 +94,7 @@ public class KnifeBehavior : MonoBehaviour
         {
             yield return new WaitForSeconds(timeBetweenAttacks);
             isAttacking = true;
-            if (playerAlive)
+            if (playerAlive&&!gc.isCatching)
             {
                 for (float i = .36f; i < 1; i += .05f)
                 {
