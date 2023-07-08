@@ -180,8 +180,13 @@ public class PlayerMovementBehavior : MonoBehaviour
         print(dirX + " " + dirY);*/
 
         Vector2 moveForce;
-        vel.x = Mathf.Cos((angle+90)*Mathf.PI / 180) * value*.05f*velModifier;
-        vel.y = Mathf.Sin((angle+90) * Mathf.PI / 180) * value*.05f*velModifier;
+        vel.x = Mathf.Cos((angle+90)*Mathf.PI / 180) * value*.01f*velModifier;
+        vel.y = Mathf.Sin((angle+90) * Mathf.PI / 180) * value*.01f*velModifier;
+        if (vel.magnitude > maxSpeed && velModifier != 2)
+        {
+            vel = Vector2.ClampMagnitude(vel, maxSpeed);
+            print("clamped");
+        }
         rb2d.AddForce(vel);
 
 
