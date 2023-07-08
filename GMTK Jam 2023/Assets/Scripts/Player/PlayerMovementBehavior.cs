@@ -43,19 +43,10 @@ public class PlayerMovementBehavior : MonoBehaviour
     public bool canSlow = false;        //Only allows slow down after first input
     Vector2 vel;                    //Player's velocity
     private float angle;
-    private float velModifier = 1;
+    public float velModifier = 1;
 
-    [SerializeField]
-    private float slowdownSpeed;
-    [SerializeField]
-    private float speedupSpeed;
-    [SerializeField]
-    private float speedAdjustmentTimer;
-
-    [SerializeField]
-    private ParticleSystem seeds;
-    [SerializeField]
-    private ParticleSystem flesh;
+    private PlayerCollisionBehavior pcb;
+    private KnifeBehavior kb;
 
     private float value;
 
@@ -74,6 +65,8 @@ public class PlayerMovementBehavior : MonoBehaviour
         vel = new Vector2(5f, 0.0001f);
         rb2d = GetComponent<Rigidbody2D>();
         rb2d.velocity = vel;
+        pcb = GetComponent<PlayerCollisionBehavior>();
+        kb = GameObject.Find("Knife").GetComponent<KnifeBehavior>();
     }
 
 
@@ -146,8 +139,11 @@ public class PlayerMovementBehavior : MonoBehaviour
             wait++;                 //Increase input checker
         }
 
-        //Set the rotation to the current angle
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        //Set the rotation to the current angle if not hit
+        if (velModifier != 0)
+        {
+            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }
 
         //Convert the given angle and force into a velocity vector
         vel.x = Mathf.Cos((angle)*Mathf.PI / 180) * value*.005f*velModifier;
@@ -219,70 +215,13 @@ public class PlayerMovementBehavior : MonoBehaviour
 
         //Set the player's position to the clamped position
         transform.position = clampedPos;
-        positions.Add(clampedPos);
+        if (kb.playerAlive)
+        {
+            positions.Add(clampedPos);
+        }
     }
 
 
     #endregion
-
-    #region Collisions
-
-    /// <summary>
-    /// Handles collisions when colliding with a trigger
-    /// </summary>
-    /// <param name="collision"></param>
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        //If the collision should slow down the player, reduce their speed
-        if (collision.gameObject.tag == "SlowDown")
-        {
-            velModifier = slowdownSpeed;
-
-            //Start a timer for when the speed returns to normal
-            StartCoroutine(SpeedChangeTimer());
-        }
-
-        //If the collision should speed up the player, increase their speed
-        if (collision.gameObject.tag == "SpeedUp")
-        {
-            velModifier = speedupSpeed;
-
-            //Start a timer for when the speed returns to normal
-            StartCoroutine(SpeedChangeTimer());
-        }
-
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Knife")
-        {
-            velModifier = 0;
-            seeds.transform.localScale = new Vector3(1, 1, 1);
-            flesh.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-            StartCoroutine(Respawn());
-
-        }
-    }
-
-    /// <summary>
-    /// Handles resetting the player's speed
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator SpeedChangeTimer()
-    {
-        yield return new WaitForSeconds(speedAdjustmentTimer);
-        velModifier = 1;
-    }
-
-    IEnumerator Respawn()
-    {
-        yield return new WaitForSeconds(3);
-        seeds.transform.localScale = Vector3.zero;
-        flesh.transform.localScale = Vector3.zero;
-    }
-
-    #endregion
-
 
 }

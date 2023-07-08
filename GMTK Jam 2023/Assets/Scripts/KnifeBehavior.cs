@@ -30,6 +30,7 @@ public class KnifeBehavior : MonoBehaviour
     private bool isAttacking = false;
     private float stepBetween = .05f;
     public bool isFallen = false;
+    public bool playerAlive = true;
 
     /// <summary>
     /// Start is called before the first frame. Initializes knife shadow and waiting
@@ -42,13 +43,23 @@ public class KnifeBehavior : MonoBehaviour
         knife.transform.localScale = Vector3.zero;
     }
 
+    public void StartKnife()
+    {
+        StopAllCoroutines();
+        canTrack = false;
+        knifeShadow.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+        StartCoroutine(Pause());
+        StartCoroutine(Attack());
+        knife.transform.localScale = Vector3.zero;
+    }
+
     /// <summary>
     /// Update is called once per frame. It sets the shadow's position to lag behind
     /// the player if it is not attacking. 
     /// </summary>
     void Update()
     {
-        if (canTrack==true)
+        if (canTrack==true&&playerAlive==true)
         {
             targetPos = player.GetComponent<PlayerMovementBehavior>().positions[0];
             player.GetComponent<PlayerMovementBehavior>().positions.Remove(targetPos);
@@ -76,38 +87,46 @@ public class KnifeBehavior : MonoBehaviour
         {
             yield return new WaitForSeconds(timeBetweenAttacks);
             isAttacking = true;
-            for(float i=.36f; i<1; i+=.05f)
+            if (playerAlive)
             {
-                knifeShadow.GetComponent<Renderer>().material.color = new Color(0, 0, 0, i);
-                yield return new WaitForSeconds(stepBetween);
+                for (float i = .36f; i < 1; i += .05f)
+                {
+                    knifeShadow.GetComponent<Renderer>().material.color = new Color(0, 0, 0, i);
+                    yield return new WaitForSeconds(stepBetween);
+                }
+                chopTargetPos = knifeShadow.transform.position;
+                chopTargetPos.y -= 4;
+                knife.transform.position = chopTargetPos;
+                knifeShadow.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
+                knife.transform.localScale = new Vector3(3, 3, 3);
+                for (float f = 3; f > 1.5f; f -= .1f)
+                {
+                    knife.transform.localScale = new Vector3(f, f, f);
+                    yield return new WaitForSeconds(stepBetween);
+                }
+                isFallen = true;
+                yield return new WaitForSeconds(1f);
+                for (float f = 1.5f; f < 3; f += .2f)
+                {
+                    knife.transform.localScale = new Vector3(f, f, f);
+                    yield return new WaitForSeconds(stepBetween);
+                }
+                isFallen = false;
+                knife.transform.localScale = Vector3.zero;
+                yield return new WaitForSeconds(.5f);
+                /*for(float i=1; i>.36f; i -= .05f)
+                {
+                    knifeShadow.GetComponent<Renderer>().material.color = new Color(0, 0, 0, i);
+                    yield return new WaitForSeconds(stepBetween);
+                }*/
+                knifeShadow.GetComponent<Renderer>().material.color = new Color(0, 0, 0, .36f);
+                isAttacking = false;
             }
-            chopTargetPos = knifeShadow.transform.position;
-            chopTargetPos.y -= 4;
-            knife.transform.position = chopTargetPos;
-            knifeShadow.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
-            knife.transform.localScale = new Vector3(3,3,3);
-            for(float f=3; f>1.5f; f -= .1f)
+            else
             {
-                knife.transform.localScale = new Vector3(f, f, f);
-                yield return new WaitForSeconds(stepBetween);
+                isAttacking = false;
             }
-            isFallen = true;
-            yield return new WaitForSeconds(1f);
-            for (float f=1.5f; f<3; f += .2f)
-            {
-                knife.transform.localScale = new Vector3(f, f, f);
-                yield return new WaitForSeconds(stepBetween);
-            }
-            isFallen = false;
-            knife.transform.localScale = Vector3.zero;
-            yield return new WaitForSeconds(.5f);
-            /*for(float i=1; i>.36f; i -= .05f)
-            {
-                knifeShadow.GetComponent<Renderer>().material.color = new Color(0, 0, 0, i);
-                yield return new WaitForSeconds(stepBetween);
-            }*/
-            knifeShadow.GetComponent<Renderer>().material.color = new Color(0, 0, 0, .36f);
-            isAttacking = false;
+            
 
         }
     }
