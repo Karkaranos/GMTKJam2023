@@ -8,6 +8,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerCollisionBehavior : MonoBehaviour
 {
@@ -139,6 +140,11 @@ public class PlayerCollisionBehavior : MonoBehaviour
             beenHit = false;
             transform.localScale = new Vector3(1, 1, 1);
             kb.StartKnife();
+        }
+        if (lives <= 0)
+        {
+            yield return new WaitForSeconds(2f);
+            SceneManager.LoadScene(3);
         }
     }
 
