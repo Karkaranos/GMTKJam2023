@@ -396,11 +396,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: f33a0ac9241c89749b1134eae68052bc, type: 3}
-    m_FontSize: 14
+    m_Font: {fileID: 12800000, guid: 1ae9cc0001792744a8bcfd76858b7175, type: 3}
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -552,8 +552,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: f33a0ac9241c89749b1134eae68052bc, type: 3}
-    m_FontSize: 18
+    m_Font: {fileID: 12800000, guid: 9f4b60108cc4e2d4d8bad453f060bee4, type: 3}
+    m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -564,14 +564,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Up Arrow - forward
-
-    Down Arrow - backward
-
-    Left Arrow - turn left
-
-    Right
-    Arrow - turn right'
+  m_Text: "\u2191 or W- forward\n\u2193 or A- backward\n\u2190 or S - turn left\n\u2192
+    or D - turn right"
 --- !u!222 &936209947
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1094,8 +1088,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: f33a0ac9241c89749b1134eae68052bc, type: 3}
-    m_FontSize: 18
+    m_Font: {fileID: 12800000, guid: 9f4b60108cc4e2d4d8bad453f060bee4, type: 3}
+    m_FontSize: 25
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -1443,8 +1437,6 @@ MonoBehaviour:
   titleScreen: {fileID: 949865751}
   controlScreen: {fileID: 1052594731}
   time: {fileID: 0}
-  minSurvived: 0
-  secSurvived: 0
 --- !u!4 &1665441845
 Transform:
   m_ObjectHideFlags: 0
