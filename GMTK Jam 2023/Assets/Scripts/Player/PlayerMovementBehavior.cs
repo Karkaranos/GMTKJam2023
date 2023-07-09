@@ -58,6 +58,10 @@ public class PlayerMovementBehavior : MonoBehaviour
 
     private GameController gc;
 
+    [SerializeField]
+    private AudioClip rollingSound;      //The sound of the tomato rolling
+    private bool audioPlaying = false;
+
     #endregion
 
     #region Functions
@@ -74,6 +78,8 @@ public class PlayerMovementBehavior : MonoBehaviour
         rb2d.velocity = vel;
         pcb = GetComponent<PlayerCollisionBehavior>();
         kb = GameObject.Find("Knife").GetComponent<KnifeBehavior>();
+
+        InvokeRepeating("PlaySounds", 0f, 0.1f);
     }
 
 
@@ -97,6 +103,25 @@ public class PlayerMovementBehavior : MonoBehaviour
         //Clamps the player within the game area
         ClampPlayer();
 
+    }
+
+    //Plays audio when conditions are met
+    private void PlaySounds()
+    {
+        if (vel != Vector2.zero && !audioPlaying)
+        {
+            //Plays the audio source from the player's position
+            AudioSource.PlayClipAtPoint(rollingSound,
+                gameObject.transform.position);
+            audioPlaying = true;
+            StartCoroutine(SoundTime());
+        }
+    }
+
+    IEnumerator SoundTime()
+    {
+        yield return new WaitForSeconds(0.88f);
+        audioPlaying = false;
     }
 
     /// <summary>
