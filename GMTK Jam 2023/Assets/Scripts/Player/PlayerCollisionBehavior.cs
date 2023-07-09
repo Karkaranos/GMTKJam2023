@@ -39,6 +39,10 @@ public class PlayerCollisionBehavior : MonoBehaviour
 
     Rigidbody2D rb2d;
 
+    [SerializeField]
+    AudioClip deathSound;     //Sound that is played when the player dies
+    private AudioSource deathNoises;
+
     #endregion
 
     #region Functions
@@ -48,6 +52,9 @@ public class PlayerCollisionBehavior : MonoBehaviour
         pmb = GetComponent<PlayerMovementBehavior>();
         kb = GameObject.Find("Knife").GetComponent<KnifeBehavior>();
         rb2d = GetComponent<Rigidbody2D>();
+
+        deathNoises = FindObjectOfType<AudioSource>();
+        deathNoises.volume = 1;
     }
 
     /// <summary>
@@ -85,6 +92,9 @@ public class PlayerCollisionBehavior : MonoBehaviour
             seeds.transform.localScale = new Vector3(1, 1, 1);
             flesh.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
             rb2d.constraints = RigidbodyConstraints2D.FreezePosition;
+
+            deathNoises.Play();
+
             //stop animating
             StartCoroutine(Respawn());
 
