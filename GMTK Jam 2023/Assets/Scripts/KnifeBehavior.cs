@@ -38,6 +38,8 @@ public class KnifeBehavior : MonoBehaviour
     public bool isFallen = false;
     public bool playerAlive = true;
 
+    PolygonCollider2D pc2d;
+
     [SerializeField]
     AudioClip knifeSound;     //Sound that plays when the knife hits the board
 
@@ -46,11 +48,13 @@ public class KnifeBehavior : MonoBehaviour
     /// </summary>
     void Start()
     {
+        pc2d = GetComponent<PolygonCollider2D>();
         gc = GameObject.Find("GameController").GetComponent<GameController>();
         knifeShadow.GetComponent<Renderer>().material.color = new Color(0, 0, 0, 0);
         StartCoroutine(Pause());
         StartCoroutine(Attack());
         knife.transform.localScale = Vector3.zero;
+        pc2d.enabled = false;
     }
 
     public void StartKnife()
@@ -114,6 +118,7 @@ public class KnifeBehavior : MonoBehaviour
                     knife.transform.localScale = new Vector3(f, f, f);
                     yield return new WaitForSeconds(stepBetween);
                 }
+                pc2d.enabled = true;
                 isFallen = true;
                 knife.GetComponent<SpriteRenderer>().sprite = knifeFlash;
                 AudioSource.PlayClipAtPoint(knifeSound, 
@@ -122,6 +127,7 @@ public class KnifeBehavior : MonoBehaviour
                 knife.GetComponent<SpriteRenderer>().sprite = normalKnife;
                 yield return new WaitForSeconds(1f);
                 isFallen = false;
+                pc2d.enabled = false;
                 for (float f = 1.5f; f < 3; f += .2f)
                 {
                     knife.transform.localScale = new Vector3(f, f, f);
