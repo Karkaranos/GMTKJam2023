@@ -37,6 +37,8 @@ public class PlayerCollisionBehavior : MonoBehaviour
     [SerializeField]
     private GameObject deadPlayer;
 
+    Rigidbody2D rb2d;
+
     #endregion
 
     #region Functions
@@ -45,6 +47,7 @@ public class PlayerCollisionBehavior : MonoBehaviour
     {
         pmb = GetComponent<PlayerMovementBehavior>();
         kb = GameObject.Find("Knife").GetComponent<KnifeBehavior>();
+        rb2d = GetComponent<Rigidbody2D>();
     }
 
     /// <summary>
@@ -81,6 +84,7 @@ public class PlayerCollisionBehavior : MonoBehaviour
             pmb.velModifier = 0;
             seeds.transform.localScale = new Vector3(1, 1, 1);
             flesh.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            rb2d.constraints = RigidbodyConstraints2D.FreezePosition;
             //stop animating
             StartCoroutine(Respawn());
 
@@ -118,6 +122,7 @@ public class PlayerCollisionBehavior : MonoBehaviour
         }
         if (lives > 0)
         {
+            rb2d.constraints = RigidbodyConstraints2D.None;
             transform.position = Vector3.zero;
             kb.playerAlive = true;
             pmb.velModifier = 1;

@@ -66,7 +66,7 @@ public class KnifeBehavior : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (canTrack==true&&playerAlive==true)
+        if (canTrack==true&&playerAlive==true&!gc.gameWon)
         {
             targetPos = player.GetComponent<PlayerMovementBehavior>().positions[0];
             player.GetComponent<PlayerMovementBehavior>().positions.Remove(targetPos);
@@ -94,7 +94,7 @@ public class KnifeBehavior : MonoBehaviour
         {
             yield return new WaitForSeconds(timeBetweenAttacks);
             isAttacking = true;
-            if (playerAlive&&!gc.isCatching)
+            if (playerAlive&&!gc.isCatching&&!gc.gameWon)
             {
                 for (float i = .36f; i < 1; i += .05f)
                 {
