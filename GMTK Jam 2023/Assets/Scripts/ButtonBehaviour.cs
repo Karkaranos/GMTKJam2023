@@ -13,12 +13,20 @@ public class ButtonBehaviour : MonoBehaviour
     [SerializeField]
     private Text time;
 
-    public int minSurvived;
-    public int secSurvived;
+    ScoreBehavior sb;
 
     public void PlayButton()
     {
         SceneManager.LoadScene(1);
+    }
+
+    public void Start()
+    {
+        sb = GameObject.Find("ScoreHandler").GetComponent<ScoreBehavior>();
+        if (SceneManager.GetActiveScene().buildIndex == 2 || SceneManager.GetActiveScene().buildIndex == 3)
+        {
+            time.text = "Time Survived: " + sb.minSurvived + ":" + sb.secSurvived;
+        }
     }
 
     public void ControlsButton()
