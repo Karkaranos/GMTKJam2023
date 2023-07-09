@@ -10,7 +10,7 @@ public class ButtonBehaviour : MonoBehaviour
 
     public void PlayButton()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 
     public void ControlsButton()
