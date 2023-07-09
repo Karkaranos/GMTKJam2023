@@ -37,6 +37,10 @@ public class GameController : MonoBehaviour
     public bool isCatching = false;
     private int gameTime;
 
+    public bool keyHeld = false;
+
+    public bool gameWon = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -62,7 +66,7 @@ public class GameController : MonoBehaviour
             yield return new WaitForSeconds(.5f);
             if (kb.playerAlive)
             {
-                if ((Mathf.Abs(playerPos.x) > 33 || (Mathf.Abs(playerPos.y) > 19.5f)) && !isCatching)
+                if ((Mathf.Abs(playerPos.x) > 33 || (Mathf.Abs(playerPos.y) > 19.5f)) && !isCatching&&!gameWon)
                 {
                     yield return new WaitForSeconds(.5f);
                     if ((Mathf.Abs(playerPos.x) > 33 || (Mathf.Abs(playerPos.y) > 19.5f)) && !isCatching)

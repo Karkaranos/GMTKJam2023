@@ -33,7 +33,7 @@ public class KnifeBehavior : MonoBehaviour
     private GameController gc;
 
     private bool canTrack = false;
-    private bool isAttacking = false;
+    public bool isAttacking = false;
     private float stepBetween = .05f;
     public bool isFallen = false;
     public bool playerAlive = true;
@@ -66,7 +66,7 @@ public class KnifeBehavior : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (canTrack==true&&playerAlive==true)
+        if (canTrack==true&&playerAlive==true&!gc.gameWon)
         {
             targetPos = player.GetComponent<PlayerMovementBehavior>().positions[0];
             player.GetComponent<PlayerMovementBehavior>().positions.Remove(targetPos);
@@ -94,7 +94,7 @@ public class KnifeBehavior : MonoBehaviour
         {
             yield return new WaitForSeconds(timeBetweenAttacks);
             isAttacking = true;
-            if (playerAlive&&!gc.isCatching)
+            if (playerAlive&&!gc.isCatching&&!gc.gameWon)
             {
                 for (float i = .36f; i < 1; i += .05f)
                 {
@@ -116,12 +116,12 @@ public class KnifeBehavior : MonoBehaviour
                 yield return new WaitForSeconds(.1f);
                 knife.GetComponent<SpriteRenderer>().sprite = normalKnife;
                 yield return new WaitForSeconds(1f);
+                isFallen = false;
                 for (float f = 1.5f; f < 3; f += .2f)
                 {
                     knife.transform.localScale = new Vector3(f, f, f);
                     yield return new WaitForSeconds(stepBetween);
                 }
-                isFallen = false;
                 knife.transform.localScale = Vector3.zero;
                 yield return new WaitForSeconds(.5f);
                 /*for(float i=1; i>.36f; i -= .05f)

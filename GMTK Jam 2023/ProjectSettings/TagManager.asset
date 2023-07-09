@@ -7,6 +7,7 @@ TagManager:
   - SlowDown
   - SpeedUp
   - Knife
+  - Key
   layers:
   - Default
   - TransparentFX
