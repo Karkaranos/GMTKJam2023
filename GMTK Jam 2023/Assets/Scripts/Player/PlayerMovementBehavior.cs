@@ -56,6 +56,8 @@ public class PlayerMovementBehavior : MonoBehaviour
     [SerializeField]
     private GameObject paw;
 
+    private GameController gc;
+
     #endregion
 
     #region Functions
@@ -66,6 +68,7 @@ public class PlayerMovementBehavior : MonoBehaviour
     /// </summary>
     void Start()
     {
+        gc = GameObject.Find("GameController").GetComponent<GameController>();
         vel = new Vector2(5f, 0.0001f);
         rb2d = GetComponent<Rigidbody2D>();
         rb2d.velocity = vel;
@@ -105,7 +108,7 @@ public class PlayerMovementBehavior : MonoBehaviour
         value = 0;
         //Resets the input checker
         wait = 0;
-        if (Input.GetKey(KeyCode.UpArrow))
+        if ((Input.GetKey(KeyCode.UpArrow)||Input.GetKey(KeyCode.W))&&kb.playerAlive)
         {
             //vel.y += forceAmt;      //Add upward force
             canSlow = true;
@@ -115,7 +118,7 @@ public class PlayerMovementBehavior : MonoBehaviour
         {
             wait++;                 //Increase input checker 
         }
-        if (Input.GetKey(KeyCode.DownArrow))
+        if ((Input.GetKey(KeyCode.DownArrow)||Input.GetKey(KeyCode.S))&&kb.playerAlive)
         {
             //vel.y -= forceAmt;      //Add downward force
             canSlow = true;
@@ -126,7 +129,7 @@ public class PlayerMovementBehavior : MonoBehaviour
             wait++;                 //Increase input checker
         }
 
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow)||Input.GetKey(KeyCode.D))
         {
             angle -= angleAmt;      //Turn player right
         }
@@ -134,7 +137,7 @@ public class PlayerMovementBehavior : MonoBehaviour
         {
             wait++;                 //Increase input checker
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow)||Input.GetKey(KeyCode.A))
         {
             angle += angleAmt;      //Turn player left
         }
@@ -166,8 +169,9 @@ public class PlayerMovementBehavior : MonoBehaviour
         }
 
         //Add velocity to the player
-        if (!isCaught)
+        if (!isCaught&&!gc.gameWon&&kb.playerAlive)
         {
+            rb2d.constraints = RigidbodyConstraints2D.None;
             rb2d.AddForce(vel);
             vel = rb2d.velocity;
             vel *= velModifier;
@@ -175,8 +179,13 @@ public class PlayerMovementBehavior : MonoBehaviour
         }
         else
         {
-            paw = GameObject.Find("Paw(Clone)");
-            transform.position = paw.transform.position;
+            if (isCaught)
+            {
+                paw = GameObject.Find("Paw(Clone)");
+                transform.position = paw.transform.position;
+                rb2d.constraints = RigidbodyConstraints2D.FreezePosition;
+                vel = Vector2.zero;
+            }
         }
 
 
