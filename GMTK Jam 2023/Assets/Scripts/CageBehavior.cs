@@ -27,7 +27,7 @@ public class CageBehavior : MonoBehaviour
     {
         gc.gameWon = true;
         transform.localScale = Vector3.zero;
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(2);
     }
 
