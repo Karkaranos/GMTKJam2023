@@ -27,6 +27,9 @@ public class UIManager : MonoBehaviour
     private Text timeText;
     [SerializeField]
     private Text gameOverText;
+    [SerializeField]
+    private Text winText;
+    private GameController gc;
 
     private int secSurvived;
     private int minSurvived;
@@ -36,6 +39,7 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gc = GameObject.Find("GameController").GetComponent<GameController>();
         pcb = GameObject.Find("Tomato").GetComponent<PlayerCollisionBehavior>();
         StartCoroutine(Timer());
 
@@ -45,6 +49,11 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         Lives();
+
+        if (gc.gameWon)
+        {
+            winText.GetComponent<Text>().color = new Color(0, 0, 0, 1);
+        }
     }
 
     private void Lives()

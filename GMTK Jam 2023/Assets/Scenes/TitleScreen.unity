@@ -182,11 +182,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: f33a0ac9241c89749b1134eae68052bc, type: 3}
-    m_FontSize: 14
+    m_Font: {fileID: 12800000, guid: 1ae9cc0001792744a8bcfd76858b7175, type: 3}
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 1
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -1277,11 +1277,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: f33a0ac9241c89749b1134eae68052bc, type: 3}
-    m_FontSize: 14
+    m_Font: {fileID: 12800000, guid: 1ae9cc0001792744a8bcfd76858b7175, type: 3}
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 0
     m_MaxSize: 40
     m_Alignment: 4
     m_AlignByGeometry: 0
@@ -1396,6 +1396,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   titleScreen: {fileID: 949865751}
   controlScreen: {fileID: 1052594731}
+  time: {fileID: 0}
+  minSurvived: 0
+  secSurvived: 0
 --- !u!4 &1665441845
 Transform:
   m_ObjectHideFlags: 0
