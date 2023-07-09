@@ -162,6 +162,7 @@ MonoBehaviour:
   splatHeart: {fileID: 21300000, guid: eac6db77f3eadba44a8376dbef15f682, type: 3}
   timeText: {fileID: 1750875144}
   gameOverText: {fileID: 1827786806}
+  winText: {fileID: 0}
 --- !u!114 &174659272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,6 +289,8 @@ MonoBehaviour:
   isAttacking: 0
   isFallen: 0
   playerAlive: 1
+  knifeSound: {fileID: 8300000, guid: 613fe070b26f8f149ad87bde2999ebd4, type: 3}
+  knifeSharp: {fileID: 8300000, guid: 7c050f57a69c1534ca05c1fa01a69503, type: 3}
 --- !u!60 &286112658
 PolygonCollider2D:
   m_ObjectHideFlags: 0

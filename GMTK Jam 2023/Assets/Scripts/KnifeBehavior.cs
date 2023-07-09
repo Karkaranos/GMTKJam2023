@@ -38,6 +38,9 @@ public class KnifeBehavior : MonoBehaviour
     public bool isFallen = false;
     public bool playerAlive = true;
 
+    [SerializeField]
+    AudioClip knifeSound;     //Sound that plays when the knife hits the board
+
     /// <summary>
     /// Start is called before the first frame. Initializes knife shadow and waiting
     /// </summary>
@@ -113,6 +116,8 @@ public class KnifeBehavior : MonoBehaviour
                 }
                 isFallen = true;
                 knife.GetComponent<SpriteRenderer>().sprite = knifeFlash;
+                AudioSource.PlayClipAtPoint(knifeSound, 
+                    Camera.main.transform.position);
                 yield return new WaitForSeconds(.1f);
                 knife.GetComponent<SpriteRenderer>().sprite = normalKnife;
                 yield return new WaitForSeconds(1f);
