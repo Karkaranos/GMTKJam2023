@@ -22,6 +22,7 @@ public class AvocadoPitBehavior : MonoBehaviour
     private float distance;
     Vector3 playerOffset;
     Vector3 pitRespawnSpot;
+    Quaternion pitRespawnAngle;
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +33,7 @@ public class AvocadoPitBehavior : MonoBehaviour
         rb2d.constraints = RigidbodyConstraints2D.FreezeAll;
         pmb = player.GetComponent<PlayerMovementBehavior>();
         pitRespawnSpot = transform.position;
+        pitRespawnAngle = transform.rotation;
     }
 
     // Update is called once per frame
@@ -98,7 +100,7 @@ public class AvocadoPitBehavior : MonoBehaviour
     IEnumerator PitDrop()
     {
         isOnKnife = false;
-        for (float i = 5f; i > 4; i -= .1f)
+        for (float i = 1.5f; i > 1; i -= .05f)
         {
             yield return new WaitForSeconds(.1f);
             transform.localScale = new Vector3(i, i, i);
@@ -109,7 +111,7 @@ public class AvocadoPitBehavior : MonoBehaviour
     {
         distance = transform.position.y-knife.transform.position.y;
         yield return new WaitForSeconds(1f);
-        for (float i = 4; i < 5; i+=.1f)
+        for (float i = 1; i < 1.5f; i+=.05f)
         {
             yield return new WaitForSeconds(.05f);
             transform.localScale = new Vector3(i, i, i);
@@ -122,6 +124,7 @@ public class AvocadoPitBehavior : MonoBehaviour
     {
         rb2d.constraints = RigidbodyConstraints2D.FreezeAll;
         transform.position = pitRespawnSpot;
+        transform.rotation = pitRespawnAngle;
         isFree = false;
         isOnKnife = false;
         isWithPlayer = false;
