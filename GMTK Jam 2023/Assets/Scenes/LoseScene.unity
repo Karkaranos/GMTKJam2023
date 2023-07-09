@@ -406,7 +406,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &733629575
 RectTransform:
   m_ObjectHideFlags: 0
@@ -500,9 +500,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   titleScreen: {fileID: 0}
   controlScreen: {fileID: 0}
-  time: {fileID: 0}
-  minSurvived: 0
-  secSurvived: 0
+  time: {fileID: 733629576}
 --- !u!4 &794577681
 Transform:
   m_ObjectHideFlags: 0
