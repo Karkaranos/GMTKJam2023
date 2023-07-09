@@ -105,7 +105,7 @@ public class PlayerMovementBehavior : MonoBehaviour
         value = 0;
         //Resets the input checker
         wait = 0;
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.UpArrow)||Input.GetKey(KeyCode.W))
         {
             //vel.y += forceAmt;      //Add upward force
             canSlow = true;
@@ -115,7 +115,7 @@ public class PlayerMovementBehavior : MonoBehaviour
         {
             wait++;                 //Increase input checker 
         }
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.DownArrow)||Input.GetKey(KeyCode.S))
         {
             //vel.y -= forceAmt;      //Add downward force
             canSlow = true;
@@ -126,7 +126,7 @@ public class PlayerMovementBehavior : MonoBehaviour
             wait++;                 //Increase input checker
         }
 
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow)||Input.GetKey(KeyCode.D))
         {
             angle -= angleAmt;      //Turn player right
         }
@@ -134,7 +134,7 @@ public class PlayerMovementBehavior : MonoBehaviour
         {
             wait++;                 //Increase input checker
         }
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKey(KeyCode.LeftArrow)||Input.GetKey(KeyCode.A))
         {
             angle += angleAmt;      //Turn player left
         }
