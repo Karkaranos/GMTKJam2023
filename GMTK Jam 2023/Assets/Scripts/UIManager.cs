@@ -30,7 +30,7 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text winText;
     private GameController gc;
-
+    ScoreBehavior sb;
     private int secSurvived;
     private int minSurvived;
 
@@ -41,6 +41,7 @@ public class UIManager : MonoBehaviour
     {
         gc = GameObject.Find("GameController").GetComponent<GameController>();
         pcb = GameObject.Find("Tomato").GetComponent<PlayerCollisionBehavior>();
+        sb=GameObject.Find("ScoreHandler").GetComponent<ScoreBehavior>();
         StartCoroutine(Timer());
 
     }
@@ -119,6 +120,8 @@ public class UIManager : MonoBehaviour
             {
                 timeText.text = ("Time Survived: " + minSurvived + ":" + secSurvived);
             }
+            sb.minSurvived = minSurvived;
+            sb.secSurvived = secSurvived;
         }
     }
 }
