@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class CageBehavior : MonoBehaviour
 {
+    [SerializeField]
+    AudioClip openSound;
+
     GameController gc;
     // Start is called before the first frame update
     void Start()
@@ -18,6 +21,8 @@ public class CageBehavior : MonoBehaviour
         {
             if (gc.keyHeld)
             {
+                AudioSource.PlayClipAtPoint(openSound,
+                    Camera.main.transform.position);
                 StartCoroutine(GameWin());
             }
         }
